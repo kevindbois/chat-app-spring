@@ -102,7 +102,7 @@ public class ClientHandler implements Runnable {
                     break;
 
                 } else if (msg.equalsIgnoreCase("/mymsgs")) {
-                    List<Message> messages = messageService.getMessages(user.getId());
+                    List<Message> messages = messageService.getMessages(user);
                     if (messages.isEmpty()) {
                         writer.println("Inga meddelanden sparade.");
                     } else {

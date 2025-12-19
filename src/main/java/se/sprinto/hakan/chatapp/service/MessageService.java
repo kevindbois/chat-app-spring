@@ -1,5 +1,5 @@
 package se.sprinto.hakan.chatapp.service;
-
+import se.sprinto.hakan.chatapp.model.User;
 import org.springframework.stereotype.Service;
 import se.sprinto.hakan.chatapp.model.Message;
 import se.sprinto.hakan.chatapp.repository.MessageRepository;
@@ -19,8 +19,8 @@ public class MessageService {
         repo.save(message);
     }
 
-    public List<Message> getMessages(Long userId) {
-        return repo.findByUserId(userId);
+    public List<Message> getMessages(User user) {
+        return user.getMessages();
     }
 }
 
