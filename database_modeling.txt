@@ -1,0 +1,96 @@
+Konceptuell modell
+Chatappen ska bestå av följande entiteter:
+* User
+* Message
+* Comment
+* Profile
+* Tag
+
+En user kan skriva flera messages och kommentarer samt ha en profilsida.
+Ett message skrivs av en user och kan kommenteras av andra users.
+Messages kan även märkas med flera taggar för att göra innehållet lättare att hitta.
+En tagg kan användas på flera messages.
+
+Relationerna för den konceptuella modellen:
+one-to-many mellan user och message
+one-to-many mellan user och comment
+one-to-one mellan user och profile
+many-to-many mellan message och tag
+
+
+Logisk modell:
+Tabellen users innehåller information om användare
+Tabellen messages innehåller meddelanden samt har en foreign key till users
+Tabellen comments innehåller kommentarer och har foreign keys till både users och messages.
+Tabellen profiles innehåller profilinformation och har en one-to-one relation till users.
+Tabellen tags innehåller taggar.
+Many-to-many relationen mellan messages samt tags modelleras med en kopplingstabell (message_tag)
+
+Full logisk modell:
+user(id, username, password)
+profile(id, profile_image, description, user_id)
+message(id, text, timestamp, user_id)
+comment(id, text, timestamp, user_id, message_id)
+tag(id, name)
+messageTag(message_id, tag_id)
+
+
+
+Alla 3 stegen i ordning
+1. Konceptuell modell
+2. Logisk modell
+3. Fysisk modell:
+
+
+
+
+
+
+----------- kommandon ------------
+USERS =
+CREATE TABLE users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(50) NOT NULL
+);
+PROFILES =
+CREATE TABLE profiles (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    profile_image VARCHAR(255),
+    description TEXT,
+    user_id BIGINT UNIQUE,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+MESSAGES =
+CREATE TABLE messages (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    text TEXT NOT NULL,
+    timestamp DATETIME NOT NULL,
+    user_id BIGINT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+COMMENTS =
+CREATE TABLE comments (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    text TEXT NOT NULL,
+    timestamp DATETIME NOT NULL,
+    user_id BIGINT NOT NULL,
+    message_id BIGINT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (message_id) REFERENCES messages(id)
+);
+TAGS =
+CREATE TABLE tags (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) UNIQUE NOT NULL
+);
+MESSAGE-TAG =
+CREATE TABLE message_tag (
+    message_id BIGINT NOT NULL,
+    tag_id BIGINT NOT NULL,
+    PRIMARY KEY (message_id, tag_id),
+    FOREIGN KEY (message_id) REFERENCES messages(id),
+    FOREIGN KEY (tag_id) REFERENCES tags(id)
+);
+
+
